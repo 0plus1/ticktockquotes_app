@@ -1,23 +1,31 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Font, AppLoading } from 'expo';
+import Drawer from './src/navigation/Drawer';
 
-export default class App extends React.Component {
+
+const FontInconsolata = require('./fonts/Inconsolata.otf');
+
+export default class App extends Component {
+
+  state = {
+    isReady: false,
+  };
+
+  async componentDidMount() {
+    const fonts = Font.loadAsync({
+      FontInconsolata,
+    });
+    await Promise.all([fonts]);
+    this.setState({ isReady: true });
+  }
+
   render() {
+    const { isReady } = this.state;
+    if (!isReady) {
+      return <AppLoading />;
+    }
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <Drawer />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
